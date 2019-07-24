@@ -1,12 +1,18 @@
 <?php
 
+/**
+ * Plugin Name: EABlender - Options
+ * Description: Implementando card personalizado
+ * Version: 1.0.0
+ * Author: Flávio Santos, Victor Gabriel, Jonas Gabriel
+ */
+
 class EABlender_Options
 {
     private $option_group = 'eablender_group';
     private $option_name = 'eablender_name';
     private $options;
     private $setting_admin_slug;
-    private static $eablender_option;
 
     public $api;
     public $s3_image;
@@ -14,19 +20,12 @@ class EABlender_Options
     public $url_user;
 
 
-    private function __construct()
+    public function __construct()
     {
         add_action( 'admin_menu', array( $this, 'add_plugin_page' ) );
         add_action( 'admin_init', array( $this, 'page_init' ) );
 
         $this->send_object();
-    }
-
-    public static function get_instance(){
-        if(is_null(self::$eablender_option)){
-            self::$eablender_option = new EABlender_Options();
-        }
-        return self::$eablender_option;
     }
 
     public function send_object() {
@@ -39,10 +38,10 @@ class EABlender_Options
    
 
     public function add_plugin_page()
-    {
+    { 
         add_options_page(
             'Banco de Dados', 
-            'Banco de Dados', 
+            'eablender-options', 
             'manage_options', 
             $this->setting_admin_slug = 'Database_menu', 
             array( $this, 'create_database_page' )
@@ -53,6 +52,7 @@ class EABlender_Options
 
     public function create_database_page()
     {
+        $this->options = get_option($this->option_name);
         ?>
         <div class="wrap">
             <h1>Alterar Base de Dados</h1>
@@ -148,3 +148,5 @@ class EABlender_Options
     }
 
 }
+
+$eablender_option = new EABlender_Options();
